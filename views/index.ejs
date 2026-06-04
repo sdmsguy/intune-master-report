@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EndUserRepo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --fg: #1d1d1f;
+  --secondary: #86868b;
+  --accent: #0066cc;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+body { 
+  font-family: var(--font); 
+  background: var(--bg); 
+  color: var(--fg); 
+  line-height: 1.47; 
+  letter-spacing: -0.022em;
+}
+
+/* ===== LOGIN ===== */
+.login-container { 
+  min-height: 100vh; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 20px; 
+}
+.login-card { 
+  width: 100%; 
+  max-width: 400px; 
+  text-align: center;
+}
+
+h1 { font-size: 48px; font-weight: 600; letter-spacing: -0.003em; margin-bottom: 8px; }
+.tagline { font-size: 21px; color: var(--secondary); margin-bottom: 40px; font-weight: 400; }
+
+.form-group { margin-bottom: 20px; text-align: left; }
+.form-group label { 
+  display: block; 
+  font-size: 12px; 
+  font-weight: 500; 
+  color: var(--secondary); 
+  margin-bottom: 8px; 
+  margin-left: 4px;
+}
+.form-group input, .form-group select { 
+  width: 100%; 
+  padding: 12px 16px; 
+  background: var(--surface); 
+  border: 1px solid var(--border); 
+  border-radius: 12px; 
+  font-size: 17px; 
+  color: var(--fg); 
+  font-family: var(--font);
+  transition: all 0.2s ease;
+}
+.form-group input:focus { border-color: var(--accent); outline: none; background: var(--bg); box-shadow: 0 0 0 4px rgba(0,102,204,0.1); }
+
+.btn-primary { 
+  width: 100%; 
+  padding: 12px 24px; 
+  background: var(--accent); 
+  color: #fff; 
+  border: none; 
+  border-radius: 12px; 
+  font-size: 17px; 
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.9; }
+
+.manage-tenants { margin-top: 40px; }
+.manage-tenants summary { 
+  font-size: 14px; 
+  color: var(--accent); 
+  cursor: pointer; 
+  font-weight: 400;
+}
+
+/* ===== DASHBOARD ===== */
+.dash { display: none; }
+.topbar { 
+  background: rgba(255,255,255,0.8); 
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--border); 
+  padding: 0 20px; 
+  height: 48px;
+  display: flex; justify-content: space-between; align-items: center; 
+  position: sticky; top: 0; z-index: 100; 
+}
+.topbar .logo { font-weight: 600; font-size: 19px; letter-spacing: -0.01em; }
+
+.main-content { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 60px; }
+
+.card-action { 
+  background: var(--surface); 
+  padding: 30px; 
+  border-radius: 20px;
+  cursor: pointer; 
+  transition: transform 0.2s ease;
+}
+.card-action:hover { transform: scale(1.02); }
+.card-action .title { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+.card-action .desc { font-size: 14px; color: var(--secondary); }
+
+#reportIframe { 
+  width: 100%; 
+  height: 80vh; 
+  border: 1px solid var(--border); 
+  border-radius: 20px;
+  margin-top: 40px; 
+  background: #fff; 
+}
+
+/* Progress */
+.progress-box { padding: 60px; text-align: center; }
+.loader { 
+  width: 24px; height: 24px; 
+  border: 2px solid var(--border); 
+  border-top-color: var(--accent); 
+  border-radius: 50%; 
+  animation: spin 0.8s linear infinite; 
+  margin: 0 auto 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* History */
+#historySection { margin-top: 80px; }
+#historySection h3 { font-size: 32px; font-weight: 600; margin-bottom: 30px; }
+.history-item { 
+  display: flex; justify-content: space-between; align-items: center; 
+  padding: 20px; background: var(--surface); border-radius: 16px; margin-bottom: 12px;
+}
+.history-item .id { font-weight: 500; font-size: 17px; }
+.history-item .date { font-size: 14px; color: var(--secondary); }
+
+/* Modals */
+.modal-overlay { 
+  display:none; position:fixed; inset:0; 
+  background: rgba(0,0,0,0.4); 
+  backdrop-filter: blur(10px);
+  z-index:1000; align-items:center; justify-content:center; 
+  padding: 20px;
+}
+.modal-content { 
+  background: var(--bg); 
+  width: 100%; max-width: 400px; 
+  padding: 40px; 
+  border-radius: 24px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" class="login-container">
+  <div class="login-card">
+    <h1>Analysis</h1>
+    <p class="tagline">Cloud Analysis for End User Environments</p>
+    
+    <div id="loginError" style="color:#ff3b30; font-size:14px; margin-bottom:20px; display:none"></div>
+
+    <div class="form-group">
+      <label>Tenant</label>
+      <select id="tenantSelect" onchange="onTenantChange()">
+        <option value="">Select a tenant</option>
+        <option value="__manual__">Manual Entry</option>
+      </select>
+    </div>
+
+    <div id="manualFields" style="display:none">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="inputName" placeholder="Contoso">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Tenant ID</label>
+      <input type="text" id="inputTenantId" placeholder="ID">
+    </div>
+
+    <div class="form-group">
+      <label>Client ID</label>
+      <input type="text" id="inputClientId" placeholder="ID">
+    </div>
+
+    <div class="form-group">
+      <label>Client Secret</label>
+      <input type="password" id="inputClientSecret" placeholder="Secret">
+    </div>
+
+    <button class="btn-primary" onclick="handleLogin()">Continue</button>
+
+    <details class="manage-tenants">
+      <summary>Manage Tenants</summary>
+      <div id="tenantList" style="margin-top:20px"></div>
+      <div style="margin-top:20px; display:grid; gap:12px">
+        <input id="addName" class="form-group" style="margin:0; padding:10px" placeholder="Name">
+        <input id="addTenantId" class="form-group" style="margin:0; padding:10px" placeholder="Tenant ID">
+        <input id="addClientId" class="form-group" style="margin:0; padding:10px" placeholder="Client ID">
+        <button class="btn-primary" style="padding:8px" onclick="addTenant()">Add</button>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashPage" class="dash">
+  <div class="topbar">
+    <div class="logo">EndUserRepo</div>
+    <div id="tbTenant" style="font-size:13px; color:var(--secondary)"></div>
+    <button onclick="handleLogout()" style="background:none; border:none; color:var(--accent); font-size:13px; cursor:pointer">Sign Out</button>
+  </div>
+
+  <div class="main-content">
+    <div class="action-grid">
+      <div class="card-action" onclick="startGeneration()">
+        <div class="title">Refresh</div>
+        <div class="desc">Update report data</div>
+      </div>
+      <div class="card-action" onclick="showEmailModal()">
+        <div class="title">Share</div>
+        <div class="desc">Email this report</div>
+      </div>
+    </div>
+
+    <div id="progressPanel" class="progress-box" style="display:none">
+      <div class="loader"></div>
+      <div id="progressText" style="font-size: 17px; font-weight: 500;">Generating Report...</div>
+    </div>
+
+    <div id="reportContainer">
+      <iframe id="reportIframe" src="about:blank"></iframe>
+    </div>
+
+    <div id="historySection">
+      <h3>History</h3>
+      <div id="historyList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL MODAL -->
+<div id="emailModal" class="modal-overlay">
+  <div class="modal-content">
+    <h2 style="margin-bottom:24px; font-size: 24px; font-weight: 600;">Share Report</h2>
+    <div class="form-group">
+      <input type="email" id="emailTo" placeholder="Recipient Email">
+    </div>
+    <div class="form-group">
+      <input type="email" id="gmailUser" placeholder="Your Gmail">
+    </div>
+    <div class="form-group">
+      <input type="password" id="gmailPass" placeholder="App Password">
+    </div>
+    <button class="btn-primary" onclick="sendEmail()">Send Now</button>
+    <button class="btn-primary" style="margin-top:12px; background:var(--surface); color:var(--accent);" onclick="scheduleEmail()">Schedule Daily</button>
+    <button onclick="hideEmailModal()" style="background:none; border:none; color:var(--accent); margin-top:20px; cursor:pointer; font-size: 14px;">Cancel</button>
+    <div id="emailStatus" style="margin-top:16px; font-size:13px; color:var(--secondary)"></div>
+  </div>
+</div>
+
+<script>
+let currentToken = null;
+let currentReportId = null;
+let tenants = [];
+
+async function loadTenants() {
+  const res = await fetch('/api/tenants');
+  tenants = await res.json();
+  const sel = document.getElementById('tenantSelect');
+  sel.innerHTML = '<option value="">Select a tenant</option><option value="__manual__">Manual Entry</option>';
+  tenants.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t.tenantId;
+    opt.textContent = t.name;
+    sel.appendChild(opt);
+  });
+}
+
+function onTenantChange() {
+  const val = document.getElementById('tenantSelect').value;
+  if (val === '__manual__') {
+    document.getElementById('manualFields').style.display = 'block';
+    document.getElementById('inputTenantId').value = '';
+    document.getElementById('inputClientId').value = '';
+  } else if (val) {
+    const t = tenants.find(x => x.tenantId === val);
+    document.getElementById('manualFields').style.display = 'none';
+    document.getElementById('inputTenantId').value = t.tenantId;
+    document.getElementById('inputClientId').value = t.clientId;
+  }
+}
+
+async function handleLogin() {
+  const tenantId = document.getElementById('inputTenantId').value;
+  const clientId = document.getElementById('inputClientId').value;
+  const clientSecret = document.getElementById('inputClientSecret').value;
+  
+  const res = await fetch('/api/login', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ tenantId, clientId, clientSecret })
+  });
+  const data = await res.json();
+  if (data.success) {
+    currentToken = data.token;
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashPage').style.display = 'block';
+    document.getElementById('tbTenant').textContent = data.tenantName;
+    startGeneration();
+  } else {
+    alert(data.error);
+  }
+}
+
+async function startGeneration() {
+  document.getElementById('progressPanel').style.display = 'block';
+  const res = await fetch('/api/generate', {
+    method: 'POST', headers: {'X-Session-Token': currentToken}
+  });
+  const data = await res.json();
+  document.getElementById('progressPanel').style.display = 'none';
+  if (data.success) {
+    currentReportId = data.reportId;
+    document.getElementById('reportIframe').src = '/view/' + data.reportId;
+    loadHistory();
+  }
+}
+
+async function loadHistory() {
+  const res = await fetch('/api/reports?token=' + currentToken);
+  const reports = await res.json();
+  const list = document.getElementById('historyList');
+  list.innerHTML = '';
+  
+  reports.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'history-item';
+    div.innerHTML = `
+      <div>
+        <div class="id">${r.id}</div>
+        <div class="date">${new Date(r.created).toLocaleString()}</div>
+      </div>
+      <button onclick="viewReport('${r.id}')" class="btn-primary" style="width:auto; padding: 6px 16px; font-size: 13px;">View</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function viewReport(id) {
+  currentReportId = id;
+  document.getElementById('reportIframe').src = '/view/' + id;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleLogout() { location.reload(); }
+function showEmailModal() { document.getElementById('emailModal').style.display = 'flex'; }
+function hideEmailModal() { document.getElementById('emailModal').style.display = 'none'; }
+
+async function sendEmail() {
+  const to = document.getElementById('emailTo').value;
+  const gmailUser = document.getElementById('gmailUser').value;
+  const gmailPass = document.getElementById('gmailPass').value;
+  const status = document.getElementById('emailStatus');
+  
+  status.textContent = 'Sending...';
+  const res = await fetch('/api/send-email', {
+    method: 'POST', headers: {'Content-Type':'application/json', 'X-Session-Token': currentToken},
+    body: JSON.stringify({ to, gmailUser, gmailPass, reportId: currentReportId, isStaticBanner: true })
+  });
+  const data = await res.json();
+  status.textContent = data.success ? 'Sent successfully' : 'Error: ' + data.error;
+}
+
+async function scheduleEmail() {
+  const to = document.getElementById('emailTo').value;
+  const gmailUser = document.getElementById('gmailUser').value;
+  const gmailPass = document.getElementById('gmailPass').value;
+  const status = document.getElementById('emailStatus');
+  
+  status.textContent = 'Scheduling...';
+  const res = await fetch('/api/schedule', {
+    method: 'POST', headers: {'Content-Type':'application/json', 'X-Session-Token': currentToken},
+    body: JSON.stringify({ 
+      to, gmailUser, gmailPass, 
+      tenantId: document.getElementById('inputTenantId').value,
+      clientId: document.getElementById('inputClientId').value,
+      clientSecret: document.getElementById('inputClientSecret').value,
+      tenantName: document.getElementById('tbTenant').textContent
+    })
+  });
+  const data = await res.json();
+  if (data.success) {
+    status.textContent = 'Scheduled daily at 8 AM';
+    setTimeout(hideEmailModal, 1500);
+  } else {
+    status.textContent = 'Error: ' + data.error;
+  }
+}
+
+window.onload = loadTenants;
+</script>
+</body>
+</html>
