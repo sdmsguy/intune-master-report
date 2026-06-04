@@ -7,8 +7,6 @@ Cloud Analysis and Reporting for End User Environments (Microsoft Intune).
 - **Multi-Tenant Support**: Manage and generate reports for multiple Microsoft 365 tenants.
 - **Automated Reporting**: Generates comprehensive PDF and HTML dashboards of Intune environments.
 - **Email Integration**: Send reports directly via Gmail with support for daily scheduling.
-- **Modern UI**: Clean, Apple-inspired aesthetic for a premium user experience.
-- **History Tracking**: Access and view previously generated reports.
 - **Secure Storage**: Encrypted session handling and secure tenant configuration.
 
 ## Prerequisites
